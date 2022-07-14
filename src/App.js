@@ -21,7 +21,7 @@ const App = () => {
 	}, [])
 
 	return (
-		<Router>
+		<Router basename="/memaword">
 			<nav>
 				<NavLink className={({ isActive }) => isActive ? 'link-active' : 'link'} to='/add'>Add</NavLink>
 				<NavLink className={({ isActive }) => isActive ? 'link-active' : 'link'} to='/learn'>Learn</NavLink>
