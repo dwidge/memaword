@@ -13,12 +13,12 @@ const AddPairs = ({ listPairs, now }) => {
 	const textareaFront = useRef()
 
 	const onExtractWords = () => {
-		setfrontWords(wordsOfString(frontWords).join('\n'))
+		setfrontWords(wordsOfString(frontWords).sort().join('\n'))
 	}
 
 	const onExtractHan = () => {
 		const [...chars] = frontWords
-		const han = unique(onlyHan(chars))
+		const han = unique(onlyHan(chars)).sort()
 
 		setfrontWords(han.join('\n'))
 	}
