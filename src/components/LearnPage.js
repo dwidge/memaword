@@ -8,9 +8,6 @@ const calcNext = (views) =>
 const calcInterval = (views) =>
 	views.length ? (last(views).next - last(views).date) : 0
 
-const calcLevel = interval =>
-	(interval / (24 * 60 * 60) + 0.0) | 0
-
 const sortPairsByNextAsc = list =>
 	list.sort((a, b) => calcNext(a.views) - calcNext(b.views))
 
@@ -42,13 +39,18 @@ TestPair.propTypes = {
 
 const ShowPair = ({ pair, onScore }) => {
 	const { front, back, views } = pair
-	const level = calcLevel(calcInterval(views))
 
-	const days = (2 * level || 1)
+	const secondsPerMin = 60
+	const secondsPerDay = 24 * 60 * 60
+	const gap = calcInterval(views)
+
+	const days = 2 * ((gap / secondsPerDay) | 0) || 1
+	const mins = 2 * ((gap / secondsPerMin) | 0) || 1
+
 	const scoreChoices = [
 		[5, '5s'],
-		[60, '1m'],
-		[(24 * 60 * 60) * (days - 0.1), days + 'd'],
+		[secondsPerMin * (mins - 0.1), mins + 'm'],
+		[secondsPerDay * (days - 0.1), days + 'd'],
 	]
 
 	return (
