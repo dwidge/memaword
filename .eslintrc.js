@@ -19,6 +19,11 @@ module.exports = {
         "react",
         "jest"
     ],
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    },
     "rules": {
         "no-tabs": 0,
         indent: ['error', "tab", { SwitchCase: 1 }],
