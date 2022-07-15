@@ -1,21 +1,8 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { last, getItemById, replaceItemById } from '@dwidge/lib/array'
-
-const calcNext = (views) =>
-	views && views.length ? (last(views).next) : 0
-
-const calcInterval = (views) =>
-	views.length ? (last(views).next - last(views).date) : 0
-
-const sortPairsByNextAsc = list =>
-	list.sort((a, b) => calcNext(a.views) - calcNext(b.views))
-
-const filterPairsByReviewDate = (list, date) =>
-	list.filter(a => calcNext(a.views) !== 0 && calcNext(a.views) <= date)
-
-const filterPairsByUnlearned = (list) =>
-	list.filter(a => a.views.length === 0)
+import { getItemById, replaceItemById } from '@dwidge/lib/array'
+import { calcInterval, ascPairsNext, isPairNextAfterDate, isPairUnlearned } from '../lib/pairs'
+import { Pair } from './Pair'
 
 const NoPairs = () => {
 	return <div>None to review.</div>
@@ -108,8 +95,8 @@ const LearnPage = ({ listPairs, now }) => {
 	const [getlistPairs, setlistPairs] = listPairs
 	const [currentId, setcurrentId] = useState(0)
 
-	const reviewPairs = sortPairsByNextAsc(filterPairsByReviewDate(getlistPairs, now))
-	const newPairs = filterPairsByUnlearned(getlistPairs)
+	const reviewPairs = getlistPairs.filter(isPairNextAfterDate(now)).sort(ascPairsNext)
+	const newPairs = getlistPairs.filter(isPairUnlearned)
 	const listPairsSorted = reviewPairs.concat(newPairs)
 
 	if (listPairsSorted.length && !currentId) { setcurrentId(listPairsSorted[0].id) }
@@ -117,22 +104,19 @@ const LearnPage = ({ listPairs, now }) => {
 	const pair = getItemById(getlistPairs, currentId)
 
 	const onUpdate = (pair) => {
-		setlistPairs(replaceItemById(getlistPairs, pair))
+		setlistPairs(replaceItemById(getlistPairs, pair).sort(ascPairsNext))
 		setcurrentId(0)
 	}
-
-	const printPairs = list =>
-		list.map(({ id, front, views }) => (<p key={id}>{front} - interval {calcInterval(views)}</p>))
 
 	return (
 		<div>
 			<h3>Learn</h3>
 			<div>
 				<details><summary>{reviewPairs.length} review pairs.</summary>
-					{printPairs(reviewPairs)}
+					{reviewPairs.map(pair => Pair({ now, pair }))}
 				</details>
 				<details><summary>{newPairs.length} new pairs.</summary>
-					{printPairs(newPairs)}
+					{newPairs.map(pair => Pair({ now, pair }))}
 				</details>
 			</div>
 			<LearnPair pair={pair} onUpdate={onUpdate} now={now} />

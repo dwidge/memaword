@@ -1,10 +1,10 @@
 import React, { useState, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { transpose, last, dropIfIncluded, onlyHan, unique } from '@dwidge/lib/array'
-import { printSecondsRounded } from '@dwidge/lib/date'
+import { transpose, dropIfIncluded, onlyHan, unique } from '@dwidge/lib/array'
 import { uuid } from '@dwidge/lib/random'
 import { wordsOfString } from '@dwidge/lib/words'
 import { onChange } from '@dwidge/lib-react/helpers'
+import { Pair } from './Pair'
 
 const AddPairs = ({ listPairs, now }) => {
 	const [pairs, setpairs] = listPairs
@@ -63,11 +63,7 @@ const AddPairs = ({ listPairs, now }) => {
 			<p>Add words to learn here. They match up to front words on each line. Or copy the front words to a translator, then paste translated here.</p>
 			<textarea value={backWords} onChange={onChange(setbackWords)} data-testid="back"></textarea>
 			<button onClick={onAddPairs} data-testid="addButton">Add</button>
-			<ul data-testid="pairsList">{pairs.map(({ id, front, back, views }) =>
-				(<li key={id}>
-					<pair-front>{front}</pair-front> = <pair-back>{back}</pair-back> / review in <pair-next>{last(views) ? printSecondsRounded((last(views).next) - now) : 'future'}</pair-next>
-				</li>),
-			)}</ul>
+			<ul data-testid="pairsList">{pairs.map(pair => Pair({ now, pair }))}</ul>
 			<button data-testid="buttonClear" onClick={onClear}>Clear</button>
 		</div>
 	)
