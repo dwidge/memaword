@@ -46,7 +46,7 @@ const ShowPair = ({ pair, onScore }) => {
 
 	const days = (2 * level || 1)
 	const scoreChoices = [
-		[1, '1s'],
+		[5, '5s'],
 		[60, '1m'],
 		[(24 * 60 * 60) * (days - 0.1), days + 'd'],
 	]

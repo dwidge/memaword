@@ -24,13 +24,22 @@ describe('extract text', () => {
 		render(<Test />)
 	})
 
-	it('splits text into random word list', async () => {
+	it('splits text into word list', async () => {
 		await userEvent.type(
 			screen.getByTestId('front'),
 			'Frontd? "fronte," frontf. ?',
 		)
-		userEvent.click(screen.getByTestId('extractButton'))
+		userEvent.click(screen.getByTestId('buttonExtractWords'))
 		expect(screen.getByTestId('front').value.split('\n').sort()).toEqual(['frontd', 'fronte', 'frontf'])
+	})
+
+	it('splits text into character list', async () => {
+		await userEvent.type(
+			screen.getByTestId('front'),
+			'受欢迎的? "受欢迎的," 受欢迎的!',
+		)
+		userEvent.click(screen.getByTestId('buttonExtractHan'))
+		expect(screen.getByTestId('front').value.split('\n').sort()).toEqual(['受', '欢', '的', '迎'])
 	})
 
 	it('does nothing with word list', async () => {
@@ -38,8 +47,8 @@ describe('extract text', () => {
 			screen.getByTestId('front'),
 			'Frontd? "fronte," frontf. ?',
 		)
-		userEvent.click(screen.getByTestId('extractButton'))
-		userEvent.click(screen.getByTestId('extractButton'))
+		userEvent.click(screen.getByTestId('buttonExtractWords'))
+		userEvent.click(screen.getByTestId('buttonExtractWords'))
 		expect(screen.getByTestId('front').value.split('\n').sort()).toEqual(['frontd', 'fronte', 'frontf'])
 	})
 
@@ -48,7 +57,7 @@ describe('extract text', () => {
 			screen.getByTestId('front'),
 			'Frontd? "fronte," frontf. Frontd frontF: frontf?',
 		)
-		userEvent.click(screen.getByTestId('extractButton'))
+		userEvent.click(screen.getByTestId('buttonExtractWords'))
 		expect(screen.getByTestId('front').value.split('\n').sort()).toEqual(['frontd', 'fronte', 'frontf'])
 	})
 
@@ -57,7 +66,7 @@ describe('extract text', () => {
 			screen.getByTestId('front'),
 			'Fronta? "frontb," frontc.',
 		)
-		userEvent.click(screen.getByTestId('extractButton'))
+		userEvent.click(screen.getByTestId('buttonExtractWords'))
 		expect(screen.getByTestId('front').value.split('\n').sort()).toEqual(['frontc'])
 	})
 })
@@ -185,7 +194,7 @@ describe('LearnPage', () => {
 
 	it('shows 3 buttons', () => {
 		userEvent.click(screen.getByTestId('buttonShow'))
-		expect(screen.getByTestId('buttonX0').textContent).toEqual('1s')
+		expect(screen.getByTestId('buttonX0').textContent).toEqual('5s')
 		expect(screen.getByTestId('buttonX1').textContent).toEqual('1m')
 		expect(screen.getByTestId('buttonX2').textContent).toEqual('1d')
 	})
