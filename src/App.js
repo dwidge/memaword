@@ -16,7 +16,7 @@ const App = () => {
 	const [getnow, setnow] = useState(Date.now())
 
 	useEffect(() => {
-		const to = setInterval(() => setnow(Date.now()), 2000)
+		const to = setInterval(() => setnow(Date.now() / 1000 | 0), 2000)
 		return () => clearTimeout(to)
 	}, [])
 

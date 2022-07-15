@@ -5,10 +5,10 @@ import userEvent from '@testing-library/user-event'
 import AddPage from './components/AddPage'
 import LearnPage from './components/LearnPage'
 
-const now = 60 * 1000
+const now = 60
 const listPairsInit = [
-	{ id: 111, front: 'fronta', back: 'backa', views: [{ date: now, next: now + 30 * 1000 }] },
-	{ id: 222, front: 'frontb', back: 'backb', views: [{ date: now, next: now + 50 * 1000 }] },
+	{ id: 111, front: 'fronta', back: 'backa', views: [{ date: now, next: now + 30 }] },
+	{ id: 222, front: 'frontb', back: 'backb', views: [{ date: now, next: now + 50 }] },
 ]
 const getTag = (el, name) =>
 	el.getElementsByTagName(name)[0]
@@ -17,7 +17,7 @@ describe('extract text', () => {
 	const Test = () => {
 		const listPairs = useState(listPairsInit)
 
-		return <AddPage listPairs={listPairs} now={now + 60 * 1000} onImport={0} onExport={0} />
+		return <AddPage listPairs={listPairs} now={now + 60} onImport={0} onExport={0} />
 	}
 
 	beforeEach(async () => {
@@ -75,7 +75,7 @@ describe('submit front/back words', () => {
 	const Test = () => {
 		const listPairs = useState([])
 
-		return <AddPage listPairs={listPairs} now={now + 60 * 1000} onImport={0} onExport={0} />
+		return <AddPage listPairs={listPairs} now={now + 60} onImport={0} onExport={0} />
 	}
 
 	beforeEach(async () => {
@@ -152,7 +152,7 @@ describe('database', () => {
 	const Test = () => {
 		const listPairs = useState([])
 
-		return <AddPage listPairs={listPairs} now={now + 60 * 1000} onImport={0} onExport={0} />
+		return <AddPage listPairs={listPairs} now={now + 60} onImport={0} onExport={0} />
 	}
 
 	beforeEach(async () => {
@@ -168,7 +168,7 @@ describe('LearnPage', () => {
 	const Test = () => {
 		const listPairs = useState(listPairsInit)
 
-		return <LearnPage listPairs={listPairs} now={now + 60 * 1000} />
+		return <LearnPage listPairs={listPairs} now={now + 60} />
 	}
 
 	beforeEach(async () => {

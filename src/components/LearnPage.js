@@ -9,7 +9,7 @@ const calcInterval = (views) =>
 	views.length ? (last(views).next - last(views).date) : 0
 
 const calcLevel = interval =>
-	(interval / (24 * 60 * 60 * 1000) + 0.0) | 0
+	(interval / (24 * 60 * 60) + 0.0) | 0
 
 const sortPairsByNextAsc = list =>
 	list.sort((a, b) => calcNext(a.views) - calcNext(b.views))
@@ -73,7 +73,7 @@ ShowPair.propTypes = {
 	onScore: PropTypes.func.isRequired,
 }
 
-const LearnPair = ({ pair, onUpdate }) => {
+const LearnPair = ({ pair, onUpdate, now }) => {
 	const [show, setshow] = useState(false)
 
 	const onShow = () => {
@@ -81,8 +81,7 @@ const LearnPair = ({ pair, onUpdate }) => {
 	}
 
 	const onScore = (t) => {
-		const now = Date.now()
-		const viewnow = { date: now, next: now + t * 1000 }
+		const viewnow = { date: now, next: now + t }
 		const pairupdated = { ...pair, views: pair.views.concat(viewnow) }
 		onUpdate(pairupdated)
 		setshow(false)
@@ -100,6 +99,7 @@ LearnPair.propTypes = {
 		views: PropTypes.array,
 	}),
 	onUpdate: PropTypes.func.isRequired,
+	now: PropTypes.number.isRequired,
 }
 
 const LearnPage = ({ listPairs, now }) => {
@@ -120,7 +120,7 @@ const LearnPage = ({ listPairs, now }) => {
 	}
 
 	const printPairs = list =>
-		list.map(({ id, front, views }) => (<p key={id}>{front} - interval {calcInterval(views) / 1000 | 0}</p>))
+		list.map(({ id, front, views }) => (<p key={id}>{front} - interval {calcInterval(views)}</p>))
 
 	return (
 		<div>
@@ -133,7 +133,7 @@ const LearnPage = ({ listPairs, now }) => {
 					{printPairs(newPairs)}
 				</details>
 			</div>
-			<LearnPair pair={pair} onUpdate={onUpdate}/>
+			<LearnPair pair={pair} onUpdate={onUpdate} now={now} />
 		</div>
 	)
 }

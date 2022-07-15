@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { transpose, last, dropIfIncluded, onlyHan, unique } from '@dwidge/lib/array'
-import { printTime } from '@dwidge/lib/date'
+import { printSecondsRounded } from '@dwidge/lib/date'
 import { uuid } from '@dwidge/lib/random'
 import { wordsOfString } from '@dwidge/lib/words'
 import { onChange } from '@dwidge/lib-react/helpers'
@@ -65,7 +65,7 @@ const AddPairs = ({ listPairs, now }) => {
 			<button onClick={onAddPairs} data-testid="addButton">Add</button>
 			<ul data-testid="pairsList">{pairs.map(({ id, front, back, views }) =>
 				(<li key={id}>
-					<pair-front>{front}</pair-front> = <pair-back>{back}</pair-back> / review in <pair-next>{last(views) ? printTime((last(views).next) - now) : 'future'}</pair-next>
+					<pair-front>{front}</pair-front> = <pair-back>{back}</pair-back> / review in <pair-next>{last(views) ? printSecondsRounded((last(views).next) - now) : 'future'}</pair-next>
 				</li>),
 			)}</ul>
 			<button data-testid="buttonClear" onClick={onClear}>Clear</button>
