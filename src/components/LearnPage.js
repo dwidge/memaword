@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { getItemById, replaceItemById } from '@dwidge/lib/array'
-import { calcInterval, ascPairsNext, isPairNextAfterDate, isPairUnlearned } from '../lib/pairs'
-import { Pair } from './Pair'
+import { calcInterval, ascPairsNext, isDateBeforePairNext, isDateAfterPairNext, isPairUnlearned } from '../lib/pairs'
 
 const NoPairs = () => {
 	return <div>None to review.</div>
@@ -95,7 +94,8 @@ const LearnPage = ({ listPairs, now }) => {
 	const [getlistPairs, setlistPairs] = listPairs
 	const [currentId, setcurrentId] = useState(0)
 
-	const reviewPairs = getlistPairs.filter(isPairNextAfterDate(now)).sort(ascPairsNext)
+	const reviewPairs = getlistPairs.filter(isDateAfterPairNext(now)).sort(ascPairsNext)
+	const oldPairs = getlistPairs.filter(isDateBeforePairNext(now)).sort(ascPairsNext)
 	const newPairs = getlistPairs.filter(isPairUnlearned)
 	const listPairsSorted = reviewPairs.concat(newPairs)
 
@@ -111,14 +111,7 @@ const LearnPage = ({ listPairs, now }) => {
 	return (
 		<div>
 			<h3>Learn</h3>
-			<div>
-				<details><summary>{reviewPairs.length} review pairs.</summary>
-					{reviewPairs.map(pair => Pair({ now, pair }))}
-				</details>
-				<details><summary>{newPairs.length} new pairs.</summary>
-					{newPairs.map(pair => Pair({ now, pair }))}
-				</details>
-			</div>
+			<p>{reviewPairs.length} review / {newPairs.length} new / {oldPairs.length} old</p>
 			<LearnPair pair={pair} onUpdate={onUpdate} now={now} />
 		</div>
 	)

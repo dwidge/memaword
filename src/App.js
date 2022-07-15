@@ -9,6 +9,7 @@ import { useStorage } from '@dwidge/lib-react/storage'
 
 import AddPage from './components/AddPage'
 import LearnPage from './components/LearnPage'
+import ListPage from './components/ListPage'
 import './App.css'
 
 const App = () => {
@@ -25,11 +26,13 @@ const App = () => {
 			<nav>
 				<NavLink className={({ isActive }) => isActive ? 'link-active' : 'link'} to='/add'>Add</NavLink>
 				<NavLink className={({ isActive }) => isActive ? 'link-active' : 'link'} to='/learn'>Learn</NavLink>
+				<NavLink className={({ isActive }) => isActive ? 'link-active' : 'link'} to='/list'>List</NavLink>
 			</nav>
 			<div>
 				<Routes>
 					<Route path='/add' element={<AddPage listPairs={listPairs} now={getnow} />} />
 					<Route path='/learn' element={<LearnPage listPairs={listPairs} now={getnow} />}/>
+					<Route path='/list' element={<ListPage listPairs={listPairs} now={getnow} />}/>
 				</Routes>
 			</div>
 		</Router>

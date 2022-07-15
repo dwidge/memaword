@@ -4,24 +4,33 @@ import userEvent from '@testing-library/user-event'
 
 import AddPage from './components/AddPage'
 import LearnPage from './components/LearnPage'
+import * as Random from '@dwidge/lib/random'
 
 const now = 60
-const listPairsInit = [
-	{ id: 111, front: 'fronta', back: 'backa', views: [{ date: now, next: now + 30 }] },
-	{ id: 222, front: 'frontb', back: 'backb', views: [{ date: now, next: now + 50 }] },
+const listPairsA = [
+	{ id: 1, front: 'fronta', back: 'backa', views: [{ date: now, next: now + 30 }] },
+	{ id: 2, front: 'frontb', back: 'backb', views: [{ date: now, next: now + 50 }] },
 ]
-const getTag = (el, name) =>
-	el.getElementsByTagName(name)[0]
+const listPairsB = [
+	{ id: 1, front: 'fronta', back: 'backa', views: [] },
+	{ id: 2, front: 'frontb', back: 'backb', views: [] },
+	{ id: 3, front: 'frontc', back: 'backc', views: [] },
+]
+
+beforeEach(async () => {
+	jest.spyOn(Random, 'uuid').mockImplementationOnce(() => 1)
+		.mockImplementationOnce(() => 2)
+		.mockImplementationOnce(() => 3)
+})
+afterEach(() => {
+	jest.restoreAllMocks()
+})
 
 describe('extract text', () => {
-	const Test = () => {
-		const listPairs = useState(listPairsInit)
-
-		return <AddPage listPairs={listPairs} now={now + 60} onImport={0} onExport={0} />
-	}
-
 	beforeEach(async () => {
-		render(<Test />)
+		const listPairs = [listPairsA, () => {}]
+
+		render(<AddPage listPairs={listPairs} now={now + 60} onImport={0} onExport={0} />)
 	})
 
 	it('splits text into word list', async () => {
@@ -72,17 +81,11 @@ describe('extract text', () => {
 })
 
 describe('submit front/back words', () => {
-	const Test = () => {
-		const listPairs = useState([])
-
-		return <AddPage listPairs={listPairs} now={now + 60} onImport={0} onExport={0} />
-	}
-
-	beforeEach(async () => {
-		render(<Test />)
-	})
-
 	it('disallows mismatched words', async () => {
+		const setlistPairs = jest.fn()
+		const listPairs = [[], setlistPairs]
+		render(<AddPage listPairs={listPairs} now={now + 60} />)
+
 		await userEvent.type(
 			screen.getByTestId('front'),
 			['fronta', 'frontb', 'frontc'].join('\n'),
@@ -95,11 +98,14 @@ describe('submit front/back words', () => {
 
 		expect(screen.getByTestId('front').textContent).toEqual(['fronta', 'frontb', 'frontc'].join('\n'))
 		expect(screen.getByTestId('back').textContent).toEqual(['backa', 'backb'].join('\n'))
-		expect([...screen.getByTestId('pairsList').children].map(c => getTag(c, 'pair-front').textContent)).toEqual([])
-		expect([...screen.getByTestId('pairsList').children].map(c => getTag(c, 'pair-back').textContent)).toEqual([])
+		expect(setlistPairs).not.toHaveBeenCalled()
 	})
 
 	it('matches front words to back words', async () => {
+		const setlistPairs = jest.fn()
+		const listPairs = [[], setlistPairs]
+		render(<AddPage listPairs={listPairs} now={now + 60} />)
+
 		await userEvent.type(
 			screen.getByTestId('front'),
 			['fronta', 'frontb', 'frontc'].join('\n'),
@@ -112,20 +118,13 @@ describe('submit front/back words', () => {
 
 		expect(screen.getByTestId('front').textContent).toEqual('')
 		expect(screen.getByTestId('back').textContent).toEqual('')
-		expect([...screen.getByTestId('pairsList').children].map(c => getTag(c, 'pair-front').textContent)).toEqual(['fronta', 'frontb', 'frontc'])
-		expect([...screen.getByTestId('pairsList').children].map(c => getTag(c, 'pair-back').textContent)).toEqual(['backa', 'backb', 'backc'])
+		expect(setlistPairs).toHaveBeenCalledWith(listPairsB)
 	})
 
 	it('ignores known pairs', async () => {
-		await userEvent.type(
-			screen.getByTestId('front'),
-			['fronta', 'frontb', 'frontc'].join('\n'),
-		)
-		await userEvent.type(
-			screen.getByTestId('back'),
-			['backa', 'backb', 'backc'].join('\n'),
-		)
-		userEvent.click(screen.getByTestId('addButton'))
+		const setlistPairs = jest.fn()
+		const listPairs = [listPairsB, setlistPairs]
+		render(<AddPage listPairs={listPairs} now={now + 60} />)
 
 		await userEvent.type(
 			screen.getByTestId('front'),
@@ -139,16 +138,11 @@ describe('submit front/back words', () => {
 
 		expect(screen.getByTestId('front').textContent).toEqual('')
 		expect(screen.getByTestId('back').textContent).toEqual('')
-		expect([...screen.getByTestId('pairsList').children].map(c => getTag(c, 'pair-front').textContent)).toEqual(['fronta', 'frontb', 'frontc'])
-		expect([...screen.getByTestId('pairsList').children].map(c => getTag(c, 'pair-back').textContent)).toEqual(['backa', 'backb', 'backc'])
+		expect(setlistPairs).toHaveBeenCalledWith(listPairsB)
 	})
 })
 
 describe('database', () => {
-	// let setlistPairs
-	// setlistPairs = jest.fn().mockName('setlistPairs')
-	// expect(setlistPairsSpy).toHaveBeenCalledWith(listPairsUpdated)
-
 	const Test = () => {
 		const listPairs = useState([])
 
@@ -166,7 +160,7 @@ describe('database', () => {
 
 describe('LearnPage', () => {
 	const Test = () => {
-		const listPairs = useState(listPairsInit)
+		const listPairs = useState(listPairsA)
 
 		return <LearnPage listPairs={listPairs} now={now + 60} />
 	}

@@ -9,6 +9,8 @@ export const calcInterval = (views) =>
 export const ascPairsNext = (a, b) =>
 	calcNext(a.views) - calcNext(b.views)
 
-export const isPairNextAfterDate = date => a => calcNext(a.views) !== 0 && calcNext(a.views) <= date
+export const isDateBeforePairNext = date => a => calcNext(a.views) !== 0 && date <= calcNext(a.views)
+
+export const isDateAfterPairNext = date => a => calcNext(a.views) !== 0 && date > calcNext(a.views)
 
 export const isPairUnlearned = a => a.views.length === 0
