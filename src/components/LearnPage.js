@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { getItemById, replaceItemById } from '@dwidge/lib/array'
-import { calcInterval, ascPairsNext, isDateBeforePairNext, isDateAfterPairNext, isPairUnlearned } from '../lib/pairs'
+import { calcInterval, groupSort } from '../lib/pairs'
 
 const NoPairs = () => {
 	return <div>None to review.</div>
@@ -94,24 +94,22 @@ const LearnPage = ({ listPairs, now }) => {
 	const [getlistPairs, setlistPairs] = listPairs
 	const [currentId, setcurrentId] = useState(0)
 
-	const reviewPairs = getlistPairs.filter(isDateAfterPairNext(now)).sort(ascPairsNext)
-	const oldPairs = getlistPairs.filter(isDateBeforePairNext(now)).sort(ascPairsNext)
-	const newPairs = getlistPairs.filter(isPairUnlearned)
-	const listPairsSorted = reviewPairs.concat(newPairs)
+	const groups = groupSort(getlistPairs, now)
+	const learnList = groups.review.concat(groups.new)
 
-	if (listPairsSorted.length && !currentId) { setcurrentId(listPairsSorted[0].id) }
+	if (learnList.length && !currentId) { setcurrentId(learnList[0].id) }
 
 	const pair = getItemById(getlistPairs, currentId)
 
 	const onUpdate = (pair) => {
-		setlistPairs(replaceItemById(getlistPairs, pair).sort(ascPairsNext))
+		setlistPairs(replaceItemById(getlistPairs, pair))
 		setcurrentId(0)
 	}
 
 	return (
 		<div>
 			<h3>Learn</h3>
-			<p>{reviewPairs.length} review / {newPairs.length} new / {oldPairs.length} old</p>
+			<p>{groups.review.length} review / {groups.new.length} new / {groups.old.length} old</p>
 			<LearnPair pair={pair} onUpdate={onUpdate} now={now} />
 		</div>
 	)
