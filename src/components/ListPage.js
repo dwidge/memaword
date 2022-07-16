@@ -16,11 +16,11 @@ const ListPage = ({ listPairs, now }) => {
 			<h3>List</h3>
 			<div>
 				{Object.entries(groupPairs).map(([group, list]) => (
-					<details key={group}><summary>{list.length} {group} pairs.</summary>
+					<details key={group}><summary>{list.length} {group}</summary>
 						{list.map(pair => Pair({ now, pair }))}
 					</details>))}
 			</div>
-			<button data-testid="buttonClear" onClick={onClear}>Clear</button>
+			<p><button data-testid="buttonClear" onClick={onClear}>Clear</button></p>
 		</div>
 	)
 }

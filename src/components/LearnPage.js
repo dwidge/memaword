@@ -4,17 +4,17 @@ import { getItemById, replaceItemById } from '@dwidge/lib/array'
 import { calcInterval, groupSort } from '../lib/pairs'
 
 const NoPairs = () => {
-	return <div>None to review.</div>
+	return <pair-div>None to review.</pair-div>
 }
 
 const TestPair = ({ pair, onShow }) => {
 	const { front } = pair
 
 	return (
-		<div>
-			<h3 data-testid="front">{front}</h3>
+		<pair-div>
+			<pair-front data-testid="front">{front}</pair-front>
 			<button data-testid="buttonShow" onClick={onShow}>Show</button>
-		</div>
+		</pair-div>
 	)
 }
 
@@ -40,15 +40,15 @@ const ShowPair = ({ pair, onScore }) => {
 	]
 
 	return (
-		<div>
-			<h3 data-testid="front">{front}</h3>
-			<h3 data-testid="back">{back}</h3>
+		<pair-div>
+			<pair-front data-testid="front">{front}</pair-front>
+			<pair-back data-testid="back">{back}</pair-back>
 			<pair-choices>
 				{scoreChoices.map(([time, label], i) =>
 					<button key={i} data-testid={'buttonX' + i} onClick={() => onScore(time)}>{label}</button>,
 				)}
 			</pair-choices>
-		</div>
+		</pair-div>
 	)
 }
 

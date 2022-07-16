@@ -44,6 +44,14 @@ height: 10em;
 
 button {
 padding: 1em;
+margin: 0.5em;
+background: darkorange;
+border: none;
+}
+
+nav {
+display: flex;
+justify-content: space-between;
 }
 
 .link,.link-active {
@@ -51,7 +59,20 @@ color: inherit;
 text-decoration: inherit;
 border: solid 1px orange;
 padding: 1em;
+display: block;
 }
 .link-active {
 background: orange;
+}
+
+pair-div {
+text-align: center;
+border: solid 1px orange;
+display: block;
+}
+
+pair-div pair-front, pair-div pair-back {
+font-family: serif;
+font-size: 3em;
+display: block;
 }
