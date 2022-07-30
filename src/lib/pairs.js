@@ -1,4 +1,4 @@
-import { last } from '@dwidge/lib/array'
+import { last } from '@dwidge/lib'
 
 export const calcNext = (views) =>
 	views && views.length ? (last(views).next) : 0

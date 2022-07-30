@@ -5,12 +5,13 @@ import {
 	Route,
 	NavLink,
 } from 'react-router-dom'
-import { useStorage } from '@dwidge/lib-react/storage'
+import { Storage } from '@dwidge/lib-react'
 
 import AddPage from './components/AddPage'
 import LearnPage from './components/LearnPage'
 import ListPage from './components/ListPage'
 import './App.css'
+const { useStorage } = Storage(useState, useEffect)
 
 const App = () => {
 	const listPairs = useStorage('pairs', [])

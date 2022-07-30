@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { last } from '@dwidge/lib/array'
-import { printSecondsRounded } from '@dwidge/lib/date'
+import { last, printSecondsRounded } from '@dwidge/lib'
 import { calcInterval } from '../lib/pairs'
 
 export const Pair = ({ now, pair }) => {

@@ -1,9 +1,7 @@
 import React, { useState, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { transpose, dropIfIncluded, onlyHan, unique } from '@dwidge/lib/array'
-import { uuid } from '@dwidge/lib/random'
-import { wordsOfString } from '@dwidge/lib/words'
-import { onChange } from '@dwidge/lib-react/helpers'
+import { transpose, dropIfIncluded, onlyHan, unique, uuid, wordsOfString } from '@dwidge/lib'
+import { onChange } from '@dwidge/lib-react'
 
 const AddPairs = ({ listPairs, now }) => {
 	const [pairs, setpairs] = listPairs

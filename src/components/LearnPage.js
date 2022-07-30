@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { getItemById, replaceItemById } from '@dwidge/lib/array'
+import { getItemById, replaceItemById, printSecondsRounded } from '@dwidge/lib'
 import { calcInterval, groupSort } from '../lib/pairs'
 
 const NoPairs = () => {
@@ -31,12 +31,12 @@ const ShowPair = ({ pair, onScore }) => {
 	const gap = calcInterval(views)
 
 	const days = 2 * ((gap / secondsPerDay) | 0) || 1
-	const mins = 2 * ((gap / secondsPerMin) | 0) || 1
+	const mins = 2 * Math.min(secondsPerDay / secondsPerMin / 4, (gap / secondsPerMin) | 0) || 1
 
 	const scoreChoices = [
-		[5, '5s'],
-		[secondsPerMin * (mins - 0.1), mins + 'm'],
-		[secondsPerDay * (days - 0.1), days + 'd'],
+		[10, '10s'],
+		[secondsPerMin * (mins), printSecondsRounded(secondsPerMin * (mins))],
+		[secondsPerDay * (days), printSecondsRounded(secondsPerDay * (days))],
 	]
 
 	return (

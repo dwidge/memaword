@@ -4,23 +4,33 @@ import userEvent from '@testing-library/user-event'
 
 import AddPage from './components/AddPage'
 import LearnPage from './components/LearnPage'
-import * as Random from '@dwidge/lib/random'
+import * as Lib from '@dwidge/lib'
+import * as J from '@dwidge/lib-react'
+const serialSpy = J.serialSpy(jest)
 
 const now = 60
 const listPairsA = [
-	{ id: 1, front: 'fronta', back: 'backa', views: [{ date: now, next: now + 30 }] },
-	{ id: 2, front: 'frontb', back: 'backb', views: [{ date: now, next: now + 50 }] },
+	{ id: 1, front: 'fronta', back: 'backa', views: [{ date: now, next: now + 60 * 8 }] },
+	{ id: 2, front: 'frontb', back: 'backb', views: [{ date: now, next: now + 10 }] },
 ]
 const listPairsB = [
 	{ id: 1, front: 'fronta', back: 'backa', views: [] },
 	{ id: 2, front: 'frontb', back: 'backb', views: [] },
 	{ id: 3, front: 'frontc', back: 'backc', views: [] },
 ]
+const listPairsC = [
+	{ id: 1, front: 'fronta', back: 'backa', views: [{ date: now, next: now + 60 * 60 * 24 * 0.9 }] },
+	{ id: 2, front: 'frontb', back: 'backb', views: [{ date: now, next: now + 60 * 60 * 24 * 7.9 }] },
+]
 
+jest.mock('@dwidge/lib', () => {
+	return {
+		__esModule: true,
+		...jest.requireActual('@dwidge/lib'),
+	}
+})
 beforeEach(async () => {
-	jest.spyOn(Random, 'uuid').mockImplementationOnce(() => 1)
-		.mockImplementationOnce(() => 2)
-		.mockImplementationOnce(() => 3)
+	serialSpy(Lib, 'uuid', [1, 2, 3])
 })
 afterEach(() => {
 	jest.restoreAllMocks()
@@ -162,7 +172,7 @@ describe('LearnPage', () => {
 	const Test = () => {
 		const listPairs = useState(listPairsA)
 
-		return <LearnPage listPairs={listPairs} now={now + 60} />
+		return <LearnPage listPairs={listPairs} now={now + 60 * 10} />
 	}
 
 	beforeEach(async () => {
@@ -188,8 +198,47 @@ describe('LearnPage', () => {
 
 	it('shows 3 buttons', () => {
 		userEvent.click(screen.getByTestId('buttonShow'))
-		expect(screen.getByTestId('buttonX0').textContent).toEqual('5s')
+		userEvent.click(screen.getByTestId('buttonX1'))
+		userEvent.click(screen.getByTestId('buttonShow'))
+		expect(screen.getByTestId('buttonX0').textContent).toEqual('10s')
 		expect(screen.getByTestId('buttonX1').textContent).toEqual('1m')
 		expect(screen.getByTestId('buttonX2').textContent).toEqual('1d')
+	})
+
+	it.skip('shows 10s, 16m, 1d buttons', () => {
+		userEvent.click(screen.getByTestId('buttonShow'))
+		userEvent.click(screen.getByTestId('buttonX2'))
+		userEvent.click(screen.getByTestId('buttonShow'))
+		expect(screen.getByTestId('buttonX0').textContent).toEqual('10s')
+		expect(screen.getByTestId('buttonX1').textContent).toEqual('16m')
+		expect(screen.getByTestId('buttonX2').textContent).toEqual('1d')
+	})
+})
+
+describe('LearnPage', () => {
+	const Test = () => {
+		const listPairs = useState(listPairsC)
+
+		return <LearnPage listPairs={listPairs} now={now + 60 * 60 * 24 * 10} />
+	}
+
+	beforeEach(async () => {
+		render(<Test />)
+	})
+
+	it.skip('shows 10s, 12h, 2d buttons', () => {
+		userEvent.click(screen.getByTestId('buttonShow'))
+		userEvent.click(screen.getByTestId('buttonX2'))
+		userEvent.click(screen.getByTestId('buttonShow'))
+		expect(screen.getByTestId('buttonX0').textContent).toEqual('10s')
+		expect(screen.getByTestId('buttonX1').textContent).toEqual('12h')
+		expect(screen.getByTestId('buttonX2').textContent).toEqual('2d')
+	})
+
+	it.skip('shows 10s, 12h, 16d buttons', () => {
+		userEvent.click(screen.getByTestId('buttonShow'))
+		expect(screen.getByTestId('buttonX0').textContent).toEqual('10s')
+		expect(screen.getByTestId('buttonX1').textContent).toEqual('12h')
+		expect(screen.getByTestId('buttonX2').textContent).toEqual('16d')
 	})
 })
