@@ -34,9 +34,9 @@ const ShowPair = ({ pair, onScore }) => {
 	const mins = 2 * Math.min(secondsPerDay / secondsPerMin / 4, (gap / secondsPerMin) | 0) || 1
 
 	const scoreChoices = [
-		[10, '10s'],
-		[secondsPerMin * (mins), printSecondsRounded(secondsPerMin * (mins))],
-		[secondsPerDay * (days), printSecondsRounded(secondsPerDay * (days))],
+		[10, '10s', 'red'],
+		[secondsPerMin * (mins), printSecondsRounded(secondsPerMin * (mins)), 'orange'],
+		[secondsPerDay * (days), printSecondsRounded(secondsPerDay * (days)), 'green'],
 	]
 
 	return (
@@ -44,8 +44,8 @@ const ShowPair = ({ pair, onScore }) => {
 			<pair-front data-testid="front">{front}</pair-front>
 			<pair-back data-testid="back">{back}</pair-back>
 			<pair-choices>
-				{scoreChoices.map(([time, label], i) =>
-					<button key={i} data-testid={'buttonX' + i} onClick={() => onScore(time)}>{label}</button>,
+				{scoreChoices.map(([time, label, color], i) =>
+					<button key={i} data-testid={'buttonX' + i} style={{ background: color }} onClick={() => onScore(time)}>{label}</button>,
 				)}
 			</pair-choices>
 		</pair-div>

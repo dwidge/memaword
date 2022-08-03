@@ -9,16 +9,14 @@ const AddPairs = ({ listPairs, now }) => {
 	const [backWords, setbackWords] = useState('')
 	const textareaFront = useRef()
 
-	const onExtractWords = () => {
-		setfrontWords(wordsOfString(frontWords).sort().join('\n'))
-	}
+	const setFrontUniqueSort = words =>
+		setfrontWords(unique(words).sort().join('\n'))
 
-	const onExtractHan = () => {
-		const [...chars] = frontWords
-		const han = unique(onlyHan(chars)).sort()
+	const onExtractWords = () =>
+		setFrontUniqueSort(wordsOfString(frontWords))
 
-		setfrontWords(han.join('\n'))
-	}
+	const onExtractHan = () =>
+		setFrontUniqueSort(onlyHan([...frontWords]))
 
 	const onCopyToClipboard = (e) => {
 		textareaFront.current.select()
@@ -47,13 +45,15 @@ const AddPairs = ({ listPairs, now }) => {
 	return (
 		<div>
 			<h3>Front</h3>
-			<p>Add source words or phrases here, one per line, or paste text document and Extract unknown words from the text.</p>
+			<p>Words or phrases, one per line.</p>
+			<p>Try this: paste a large paragraph and click [Words] to extract unknown words from the text. [Han] will extract unknown han characters.</p>
 			<textarea ref={textareaFront} value={frontWords} onChange={onChange(setfrontWords)} data-testid="front"></textarea>
 			<button onClick={onExtractWords} data-testid="buttonExtractWords">Words</button>
 			<button onClick={onExtractHan} data-testid="buttonExtractHan">Han</button>
 			<button onClick={onCopyToClipboard} data-testid="copyButton">Copy</button>
 			<h3>Back</h3>
-			<p>Add words to learn here. They match up to front words on each line. Or copy the front words to a translator, then paste translated here.</p>
+			<p>Words or phrases, one per line. Must match with [Front] list.</p>
+			<p>Try this: Copy the [Front] word list to an online translator, then paste the translated list here.</p>
 			<textarea value={backWords} onChange={onChange(setbackWords)} data-testid="back"></textarea>
 			<button onClick={onAddPairs} data-testid="addButton">Add</button>
 		</div>
