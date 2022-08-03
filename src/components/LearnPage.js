@@ -7,12 +7,13 @@ const NoPairs = () => {
 	return <pair-div>None to review.</pair-div>
 }
 
-const TestPair = ({ pair, onShow }) => {
+const TestPair = ({ pair, choices, onShow }) => {
 	const { front } = pair
 
 	return (
 		<pair-div>
 			<pair-front data-testid="front">{front}</pair-front>
+			{choices.map(v => (<div key={v}>{v}</div>))}
 			<button data-testid="buttonShow" onClick={onShow}>Show</button>
 		</pair-div>
 	)
@@ -20,6 +21,7 @@ const TestPair = ({ pair, onShow }) => {
 
 TestPair.propTypes = {
 	pair: PropTypes.object.isRequired,
+	choices: PropTypes.array.isRequired,
 	onShow: PropTypes.func.isRequired,
 }
 
@@ -61,7 +63,7 @@ ShowPair.propTypes = {
 	onScore: PropTypes.func.isRequired,
 }
 
-const LearnPair = ({ pair, onUpdate, now }) => {
+const LearnPair = ({ pair, choices, onUpdate, now }) => {
 	const [show, setshow] = useState(false)
 
 	const onShow = () => {
@@ -76,7 +78,7 @@ const LearnPair = ({ pair, onUpdate, now }) => {
 	}
 
 	if (pair) {
-		if (show) { return <ShowPair pair={pair} onScore={onScore}/> } else { return <TestPair pair={pair} onShow={onShow}/> }
+		if (show) { return <ShowPair pair={pair} onScore={onScore}/> } else { return <TestPair pair={pair} choices={choices} onShow={onShow}/> }
 	} else { return <NoPairs/> }
 }
 
@@ -86,18 +88,25 @@ LearnPair.propTypes = {
 		back: PropTypes.string,
 		views: PropTypes.array,
 	}),
+	choices: PropTypes.array.isRequired,
 	onUpdate: PropTypes.func.isRequired,
 	now: PropTypes.number.isRequired,
 }
 
 const LearnPage = ({ listPairs, now }) => {
+	const [showmulti, setshowmulti] = useState(false)
 	const [getlistPairs, setlistPairs] = listPairs
 	const [currentId, setcurrentId] = useState(0)
+	const [choices, setchoices] = useState([])
 
 	const groups = groupSort(getlistPairs, now)
 	const learnList = groups.review.concat(groups.new)
 
-	if (learnList.length && !currentId) { setcurrentId(learnList[0].id) }
+	if (learnList.length && !currentId) {
+		setcurrentId(learnList[0].id)
+		const c = showmulti ? learnList.slice(0, 5).map(p => p.back).sort(() => 0.5 - Math.random()) : []
+		setchoices(c)
+	}
 
 	const pair = getItemById(getlistPairs, currentId)
 
@@ -110,7 +119,8 @@ const LearnPage = ({ listPairs, now }) => {
 		<div>
 			<h3>Learn</h3>
 			<p>{groups.review.length} review / {groups.new.length} new / {groups.old.length} old</p>
-			<LearnPair pair={pair} onUpdate={onUpdate} now={now} />
+			<p><input id="multichoice" type="checkbox" checked={showmulti} onChange={() => { setshowmulti(v => !v); setcurrentId(0) }} /> <label htmlFor="multichoice">Multichoice</label></p>
+			<LearnPair pair={pair} choices={choices} onUpdate={onUpdate} now={now} />
 		</div>
 	)
 }
