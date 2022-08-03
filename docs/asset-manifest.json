@@ -1,0 +1,11 @@
+{
+  "files": {
+    "main.css": "/memaword/static/css/main.c8e5933e.css",
+    "main.js": "/memaword/static/js/main.916a737f.js",
+    "index.html": "/memaword/index.html"
+  },
+  "entrypoints": [
+    "static/css/main.c8e5933e.css",
+    "static/js/main.916a737f.js"
+  ]
+}
