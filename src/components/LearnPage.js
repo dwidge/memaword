@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { getItemById, replaceItemById, printSecondsRounded } from '@dwidge/lib'
-import { calcInterval, groupSort } from '../lib/pairs'
+import { calcInterval, groupSort, reschedule } from '../lib/pairs'
 
 const NoPairs = () => {
 	return <pair-div>None to review.</pair-div>
@@ -71,9 +71,7 @@ const LearnPair = ({ pair, choices, onUpdate, now }) => {
 	}
 
 	const onScore = (t) => {
-		const viewnow = { date: now, next: now + t }
-		const pairupdated = { ...pair, views: pair.views.concat(viewnow) }
-		onUpdate(pairupdated)
+		onUpdate(reschedule(pair, t, now))
 		setshow(false)
 	}
 

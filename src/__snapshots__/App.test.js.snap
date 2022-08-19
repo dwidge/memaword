@@ -1,0 +1,73 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MatchPage renders 1`] = `
+<div
+  data-testid="pageMatch"
+>
+  <h3>
+    Match
+  </h3>
+  <p>
+    Choose the easiest pair.
+  </p>
+  <p>
+    Pairs 
+    <input
+      max="10"
+      min="1"
+      step="1"
+      type="range"
+      value="4"
+    />
+     
+    4
+  </p>
+  <pair-div>
+    <pair-front
+      style="display: inline-block; font-size: 2em; padding: 0.2em; margin: 0.2em;"
+    >
+      frontb
+    </pair-front>
+    <pair-front
+      style="display: inline-block; font-size: 2em; padding: 0.2em; margin: 0.2em;"
+    >
+      fronta
+    </pair-front>
+    <p>
+      Size 
+      <input
+        max="4"
+        min="0.5"
+        step=".5"
+        type="range"
+        value="2"
+      />
+       
+      2
+    </p>
+    <hr />
+    <pair-back
+      style="display: inline-block; font-size: 2em; padding: 0.2em; margin: 0.2em;"
+    >
+      backb
+    </pair-back>
+    <pair-back
+      style="display: inline-block; font-size: 2em; padding: 0.2em; margin: 0.2em;"
+    >
+      backa
+    </pair-back>
+    <p>
+      Size 
+      <input
+        max="4"
+        min="0.5"
+        step=".5"
+        type="range"
+        value="2"
+      />
+       
+      2
+    </p>
+  </pair-div>
+</div>
+`;

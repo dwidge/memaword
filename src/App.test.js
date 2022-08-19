@@ -4,7 +4,9 @@ import userEvent from '@testing-library/user-event'
 
 import AddPage from './components/AddPage'
 import LearnPage from './components/LearnPage'
+import MatchPage from './components/MatchPage'
 import * as Lib from '@dwidge/lib'
+
 import * as J from '@dwidge/lib-react'
 const serialSpy = J.serialSpy(jest)
 
@@ -23,12 +25,17 @@ const listPairsC = [
 	{ id: 2, front: 'frontb', back: 'backb', views: [{ date: now, next: now + 60 * 60 * 24 * 7.9 }] },
 ]
 
-jest.mock('@dwidge/lib', () => {
-	return {
-		__esModule: true,
-		...jest.requireActual('@dwidge/lib'),
-	}
-})
+jest.mock('@dwidge/lib', () => ({
+	__esModule: true,
+	...jest.requireActual('@dwidge/lib'),
+	uuid: () => 100,
+}))
+jest.mock('./lib/pairs', () => ({
+	__esModule: true,
+	...jest.requireActual('./lib/pairs'),
+	randomAsc: () => 0,
+	firstNshuffled: (a, n = 5) => a.slice(0, n),
+}))
 beforeEach(async () => {
 	serialSpy(Lib, 'uuid', [1, 2, 3])
 })
@@ -240,5 +247,21 @@ describe('LearnPage', () => {
 		expect(screen.getByTestId('buttonX0').textContent).toEqual('10s')
 		expect(screen.getByTestId('buttonX1').textContent).toEqual('12h')
 		expect(screen.getByTestId('buttonX2').textContent).toEqual('16d')
+	})
+})
+
+describe('MatchPage', () => {
+	const Test = () => {
+		const listPairs = useState(listPairsC)
+
+		return <MatchPage listPairs={listPairs} />
+	}
+
+	beforeEach(async () => {
+		render(<Test />)
+	})
+
+	it('renders', () => {
+		expect(screen.getByTestId('pageMatch')).toMatchSnapshot()
 	})
 })
