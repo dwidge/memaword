@@ -18,18 +18,27 @@ const MatchPage = ({ listPairs }) => {
   const [backInd, setbackInd] = useState();
 
   const resetList = () => {
+    if (!learnList.length) return { front: [], back: [] };
+
     const front = learnList[0];
     const back = learnList
       .slice(1)
       .filter((o) => o.back !== front.back)
       .slice(0, n - 1);
-    return { front: [front], back: [front, ...back].sort(randomAsc) };
+
+    const question = [front];
+    const options = [front, ...back].sort(randomAsc);
+
+    return Math.random() > 0.5
+      ? { front: question, back: options }
+      : { back: question, front: options };
   };
   const [list, setlist] = useState(resetList());
   useEffect(() => {
     const l = resetList();
     setlist(l);
     if (l.front.length === 1) setfrontInd(l.front[0].id);
+    if (l.back.length === 1) setbackInd(l.back[0].id);
   }, [n, init]);
 
   useEffect(() => {
