@@ -38,7 +38,7 @@ const MatchPage = ({ listPairs }) => {
     const l = resetList();
     setlist(l);
     if (l.front.length === 1) setfrontInd(l.front[0].id);
-    if (l.back.length === 1) setbackInd(l.back[0].id);
+    else if (l.back.length === 1) setbackInd(l.back[0].id);
   }, [n, init]);
 
   useEffect(() => {
