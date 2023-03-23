@@ -12,6 +12,16 @@ const ListPage = ({ listPairs, now }) => {
       setlistPairs([]);
     }
   };
+  const onImport = () => {
+    if (window.confirm("Clear database?")) {
+      setlistPairs([]);
+    }
+  };
+  const onExport = () => {
+    if (window.confirm("Clear database?")) {
+      setlistPairs([]);
+    }
+  };
 
   return (
     <div>
@@ -30,6 +40,8 @@ const ListPage = ({ listPairs, now }) => {
         <button data-testid="buttonClear" onClick={onClear}>
           Clear
         </button>
+        <button onClick={onImport}>Import</button>
+        <button onClick={onExport}>Export</button>
       </p>
     </div>
   );

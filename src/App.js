@@ -12,8 +12,12 @@ import AddParagraph from "./components/AddParagraph";
 import LearnPage from "./components/LearnPage";
 import MatchPage from "./components/MatchPage";
 import ListPage from "./components/ListPage";
+import DataPage from "./components/Data";
 import "./App.css";
 const { useStorage } = Storage(useState, useEffect);
+import CSV from "./components/formats/csv";
+import XLSX from "./components/formats/xls";
+import JSON from "./components/formats/json";
 
 const App = () => {
   const listPairs = useStorage("pairs", []);
@@ -58,9 +62,16 @@ const App = () => {
         >
           List
         </NavLink>
+        <NavLink
+          className={({ isActive }) => (isActive ? "link-active" : "link")}
+          to="/data"
+        >
+          Data
+        </NavLink>
       </nav>
       <div>
         <Routes>
+          <Route path="/" element={<MatchPage listPairs={listPairs} />} />
           <Route
             path="/add"
             element={<AddPage listPairs={listPairs} now={getnow} />}
@@ -83,6 +94,19 @@ const App = () => {
           <Route
             path="/list"
             element={<ListPage listPairs={listPairs} now={getnow} />}
+          />
+          <Route
+            path="/data"
+            element={
+              <DataPage
+                tables={{ listPairs, listSents }}
+                formats={{
+                  CSV,
+                  XLSX,
+                  JSON,
+                }}
+              />
+            }
           />
         </Routes>
       </div>
