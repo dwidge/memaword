@@ -16,18 +16,22 @@ const AddParagraph = ({
 }) => {
   const [text, setText] = useState("");
 
-  const onExtractSents = () => {};
+  const onExtractSents = () => {
+    setText(wordsOfString(text).join(" "));
+    console.log(wordsOfString(text));
+  };
 
   const onAdd = () => {
-    const newSents = [];
-    setSents(allSents.concat(newSents));
+    const newSents = text.split(" ");
+    setSents([...allSents, newSents]);
     setText("");
   };
 
   return (
     <div>
       <p>
-        Try this: paste a large paragrah and click [Sents] to extract sentences.
+        Try this: paste a large paragraph and click [Sents] to extract
+        sentences.
       </p>
       <textarea value={text} onChange={onChange(setText)}></textarea>
       <button onClick={onExtractSents}>Sents</button>

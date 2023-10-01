@@ -3,9 +3,18 @@ import PropTypes from "prop-types";
 import { groupSort } from "../lib/pairs";
 import { Pair } from "./Pair";
 
-const ListPage = ({ listPairs, now }) => {
+const ListPage = ({ listPairs, progress: [progress] }) => {
+  const now = Date.now() / 1000;
+  const today = (now / (3600 * 24)) | 0;
+  console.log({ today, day: progress.day, diff: today - progress.day });
   const [getlistPairs, setlistPairs] = listPairs;
-  const groupPairs = groupSort(getlistPairs, now);
+  //console.log({progress})
+  const combinedPairs = getlistPairs.map((p, i) => ({
+    ...p,
+    i,
+    progress: progress.list[i],
+  }));
+  const groupPairs = groupSort(combinedPairs, today - progress.day);
 
   const onClear = () => {
     if (window.confirm("Clear database?")) {

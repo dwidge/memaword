@@ -5,23 +5,32 @@ import {
   Route,
   NavLink,
 } from "react-router-dom";
-import { Storage } from "@dwidge/lib-react";
+import { useStorage, useCache } from "./lib/useCache";
+import { useProgressStr } from "./lib/useProgressToStr";
 
 import AddPage from "./components/AddPage";
 import AddParagraph from "./components/AddParagraph";
 import LearnPage from "./components/LearnPage";
 import MatchPage from "./components/MatchPage";
 import ListPage from "./components/ListPage";
+import ManageProgress from "./components/ManageProgress";
 import DataPage from "./components/Data";
 import "./App.css";
-const { useStorage } = Storage(useState, useEffect);
-import CSV from "./components/formats/csv";
-import XLSX from "./components/formats/xls";
-import JSON from "./components/formats/json";
+import formats from "./components/formats";
+
+const combinePairsProgress=([pairs,setPairs],[progress,setProgress])=>{
+return [pairs,setPairs]
+}
 
 const App = () => {
-  const listPairs = useStorage("pairs", []);
+  const listPairsOnly = useStorage("pairs", []);
   const listSents = useStorage("sents", []);
+  const progress = useCache(useProgressStr(useStorage("progress", "")));
+  const p = [progress.get, progress.set];
+  //console.log({ p });
+
+const listPairs=combinePairsProgress(listPairsOnly,p)
+
   const [getnow, setnow] = useState(Date.now());
 
   useEffect(() => {
@@ -64,12 +73,21 @@ const App = () => {
         </NavLink>
         <NavLink
           className={({ isActive }) => (isActive ? "link-active" : "link")}
+          to="/progress"
+        >
+          Progress
+        </NavLink>
+        <NavLink
+          className={({ isActive }) => (isActive ? "link-active" : "link")}
           to="/data"
         >
           Data
         </NavLink>
       </nav>
       <div>
+        <button onClick={() => progress.save()}>
+          Save {progress.changed ? "*" : ""}
+        </button>
         <Routes>
           <Route path="/" element={<MatchPage listPairs={listPairs} />} />
           <Route
@@ -90,22 +108,29 @@ const App = () => {
             path="/learn"
             element={<LearnPage listPairs={listPairs} now={getnow} />}
           />
-          <Route path="/match" element={<MatchPage listPairs={listPairs} />} />
+          <Route
+            path="/match"
+            element={<MatchPage listPairs={listPairs} progress={p} />}
+          />
           <Route
             path="/list"
-            element={<ListPage listPairs={listPairs} now={getnow} />}
+            element={
+              <ListPage listPairs={listPairs} now={getnow} progress={p} />
+            }
+          />
+          <Route
+            path="/progress"
+            element={
+              <ManageProgress
+                listPairs={listPairs}
+                progress={[progress.get, progress.set]}
+              />
+            }
           />
           <Route
             path="/data"
             element={
-              <DataPage
-                tables={{ listPairs, listSents }}
-                formats={{
-                  CSV,
-                  XLSX,
-                  JSON,
-                }}
-              />
+              <DataPage tables={{ listPairs, listSents }} formats={formats} />
             }
           />
         </Routes>

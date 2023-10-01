@@ -15,6 +15,7 @@ export const Pair = ({ now, pair }) => {
       <pair-interval>
         {last(views) ? printSecondsRounded(calcInterval(views)) : "-"}
       </pair-interval>
+      <pre>{JSON.stringify(pair, null, 2)}</pre>
     </li>
   );
 };

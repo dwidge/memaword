@@ -14,6 +14,8 @@ const AddPairs = ({ listPairs, now }) => {
   const [pairs, setpairs] = listPairs;
   const [frontWords, setfrontWords] = useState("");
   const [backWords, setbackWords] = useState("");
+  const [group, setGroup] = useState("");
+
   const textareaFront = useRef();
 
   const setFrontUniqueSort = (words) =>
@@ -40,7 +42,7 @@ const AddPairs = ({ listPairs, now }) => {
     const isSamePair = (a, b) => a.front === b.front && a.back === b.back;
 
     const newpairs = transpose([frontWordsA, backWordsA]).map(
-      ([front, back]) => ({ id: uuid(), front, back, views: [] })
+      ([front, back]) => ({ id: uuid(), front, back, views: [], group })
     );
 
     const unseenpairs = dropIfIncluded(newpairs, pairs, isSamePair);
@@ -52,6 +54,8 @@ const AddPairs = ({ listPairs, now }) => {
 
   return (
     <div>
+      <h3>Group</h3>
+      <input value={group} onChange={onChange(setGroup)}></input>
       <h3>Front</h3>
       <p>Words or phrases, one per line.</p>
       <p>

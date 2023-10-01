@@ -52,9 +52,24 @@ const Data = ({ tables: ts, formats = {} }) => {
           {data.map(([key, [get, set]]) => (
             <p key={key}>
               {key}: {isArray(get) ? get.length : Object.keys(get).join(" ")}
+              {isArray(get) ? (
+                <Button
+                  onClick={() => {
+                    if (confirm(`Clear ${key}?`)) set([]);
+                  }}
+                >
+                  Clear {key}
+                </Button>
+              ) : null}
             </p>
           ))}
-          <Button onClick={() => clearAll(data)}>Clear</Button>
+          <Button
+            onClick={() => {
+              if (confirm(`Clear all?`)) clearAll(data);
+            }}
+          >
+            Clear
+          </Button>
         </Card.Body>
       </Card>
     </>
