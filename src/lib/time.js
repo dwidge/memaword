@@ -1,6 +1,7 @@
 export const getSecond = () => (new Date() / 1000) | 0;
 
-export const getDaysFromSeconds = (s) => ((s | 0) / (60 * 60 * 24)) | 0;
+export const getDaysFromSeconds = (s) =>
+((s | 0) / (60 * 60 * 24)) | 0;
 
 export const getDates = (pairs) =>
   pairs.map(({ views: [{ date = 0, next = 0 } = {}] = [] }) => next | 0);

@@ -1,5 +1,5 @@
 import { last } from "@dwidge/lib";
-import {getDaysOfSeconds} from './time.js'
+import {getDaysFromSeconds} from './time.js'
 
 export const calcNext = (views) =>
   views && views.length ? last(views).next : 0;
@@ -33,8 +33,8 @@ export const isPending =
   (today) =>
   (x) =>{
 console.log('x111111',x)
-const { views: [{date,next}]=[{}] }=x
-const level=date?1:0,day=getDaysOfSeconds(next)
+const { views: [{date,next}={}]=[] }=x
+const level=date?1:0,day=getDaysFromSeconds(next)
  return   level > 0 && day <= today;
 }
 export const isPending2 =
@@ -47,12 +47,12 @@ const { progress: [level, day] }=x
 
 export const isDone =
   (today) =>
-  ({ progress: [level, day] }) =>
+  ({ progress: [level, day]=[] }) =>
     level > 0 && day > today;
 
 export const isNew =
   (today) =>
-  ({ progress: [level] }) =>
+  ({ progress: [level]=[] }) =>
     level === 0;
 
 export const groupSort = (list, today) => ({
