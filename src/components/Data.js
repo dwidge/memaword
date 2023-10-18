@@ -121,7 +121,7 @@ const Data = ({ tables: ts, formats = {} }) => {
                       )}
                     </td>
                   </tr>
-                )
+                ),
               )}
             </tbody>
           </Table>

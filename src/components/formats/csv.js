@@ -11,7 +11,7 @@ const importCSV = (input, keys = []) =>
       const key = first || keys[i];
       const rows = calcObjectsFromCsv(first ? lines.slice(1).join("\n") : t);
       return [key, rows];
-    })
+    }),
   );
 
 const exportCSV = (ts = tables) =>
@@ -22,7 +22,7 @@ const exportCSV = (ts = tables) =>
         key +
         '"' +
         "\r\n" +
-        calcCsvFromObjects(isArray(get) ? get : [get])
+        calcCsvFromObjects(isArray(get) ? get : [get]),
     )
     .join("\r\n\r\n");
 

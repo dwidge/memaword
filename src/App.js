@@ -5,7 +5,7 @@ import {
   Route,
   NavLink,
 } from "react-router-dom";
-import { useStorage, useCache } from "./lib/useCache";
+import { useJson, useLog, useStorage, useCache } from "./lib/useCache";
 import { useProgressStr } from "./lib/useProgressToStr";
 
 import AddPage from "./components/AddPage";
@@ -18,23 +18,26 @@ import DataPage from "./components/Data";
 import "./App.css";
 import formats from "./components/formats";
 
-const combinePairsProgress=([pairs,setPairs],[progress,setProgress])=>{
-return [pairs,setPairs]
-}
+const combinePairsProgress = ([pairs, setPairs], [progress, setProgress]) => {
+  return [pairs, setPairs];
+};
+
+const getNow = () => (Date.now() / 1000) | 0;
 
 const App = () => {
-  const listPairsOnly = useStorage("pairs", []);
-  const listSents = useStorage("sents", []);
-  const progress = useCache(useProgressStr(useStorage("progress", "")));
-  const p = [progress.get, progress.set];
-  //console.log({ p });
+  const listPairsOnly = useJson(useLog(useStorage("pairs", "[]"), "pairs"));
+  const listSents = useJson(useLog(useStorage("sents", "[]"), "sents"));
+  const progress = useCache(
+    useProgressStr(useLog(useStorage("progress", ""), "progress")),
+  );
+  const p = progress.state;
 
-const listPairs=combinePairsProgress(listPairsOnly,p)
+  const listPairs = combinePairsProgress(listPairsOnly, p);
 
-  const [getnow, setnow] = useState(Date.now());
+  const [now, setNow] = useState(getNow);
 
   useEffect(() => {
-    const to = setInterval(() => setnow((Date.now() / 1000) | 0), 2000);
+    const to = setInterval(() => setNow(getNow), 3000);
     return () => clearTimeout(to);
   }, []);
 
@@ -92,7 +95,7 @@ const listPairs=combinePairsProgress(listPairsOnly,p)
           <Route path="/" element={<MatchPage listPairs={listPairs} />} />
           <Route
             path="/add"
-            element={<AddPage listPairs={listPairs} now={getnow} />}
+            element={<AddPage listPairs={listPairs} now={now} />}
           />
           <Route
             path="/add-paragraph"
@@ -100,31 +103,26 @@ const listPairs=combinePairsProgress(listPairsOnly,p)
               <AddParagraph
                 listPairs={listPairs}
                 listSents={listSents}
-                now={getnow}
+                now={now}
               />
             }
           />
           <Route
             path="/learn"
-            element={<LearnPage listPairs={listPairs} now={getnow} />}
+            element={<LearnPage listPairs={listPairs} now={now} />}
           />
           <Route
             path="/match"
-            element={<MatchPage listPairs={listPairs} progress={p} />}
+            element={<MatchPage listPairs={listPairs} progress={p} now={now} />}
           />
           <Route
             path="/list"
-            element={
-              <ListPage listPairs={listPairs} now={getnow} progress={p} />
-            }
+            element={<ListPage listPairs={listPairs} progress={p} now={now} />}
           />
           <Route
             path="/progress"
             element={
-              <ManageProgress
-                listPairs={listPairs}
-                progress={[progress.get, progress.set]}
-              />
+              <ManageProgress listPairs={listPairs} progress={p} now={now} />
             }
           />
           <Route

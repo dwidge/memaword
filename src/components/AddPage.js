@@ -42,7 +42,7 @@ const AddPairs = ({ listPairs, now }) => {
     const isSamePair = (a, b) => a.front === b.front && a.back === b.back;
 
     const newpairs = transpose([frontWordsA, backWordsA]).map(
-      ([front, back]) => ({ id: uuid(), front, back, views: [], group })
+      ([front, back]) => ({ id: uuid(), front, back, views: [], group }),
     );
 
     const unseenpairs = dropIfIncluded(newpairs, pairs, isSamePair);

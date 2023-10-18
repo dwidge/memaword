@@ -68,14 +68,19 @@ describe("extract text", () => {
     const listPairs = [listPairsA, () => {}];
 
     render(
-      <AddPage listPairs={listPairs} now={now + 60} onImport={0} onExport={0} />
+      <AddPage
+        listPairs={listPairs}
+        now={now + 60}
+        onImport={0}
+        onExport={0}
+      />,
     );
   });
 
   it("splits text into word list", async () => {
     await userEvent.type(
       screen.getByTestId("front"),
-      'Frontd? "fronte," frontf. ?'
+      'Frontd? "fronte," frontf. ?',
     );
     userEvent.click(screen.getByTestId("buttonExtractWords"));
     expect(screen.getByTestId("front").value.split("\n").sort()).toEqual([
@@ -88,7 +93,7 @@ describe("extract text", () => {
   it("splits text into character list", async () => {
     await userEvent.type(
       screen.getByTestId("front"),
-      '受欢迎的? "受欢迎的," 受欢迎的!'
+      '受欢迎的? "受欢迎的," 受欢迎的!',
     );
     userEvent.click(screen.getByTestId("buttonExtractHan"));
     expect(screen.getByTestId("front").value.split("\n").sort()).toEqual([
@@ -102,7 +107,7 @@ describe("extract text", () => {
   it("does nothing with word list", async () => {
     await userEvent.type(
       screen.getByTestId("front"),
-      'Frontd? "fronte," frontf. ?'
+      'Frontd? "fronte," frontf. ?',
     );
     userEvent.click(screen.getByTestId("buttonExtractWords"));
     userEvent.click(screen.getByTestId("buttonExtractWords"));
@@ -116,7 +121,7 @@ describe("extract text", () => {
   it.skip("extracts unique words", async () => {
     await userEvent.type(
       screen.getByTestId("front"),
-      'Frontd? "fronte," frontf. Frontd frontF: frontf?'
+      'Frontd? "fronte," frontf. Frontd frontF: frontf?',
     );
     userEvent.click(screen.getByTestId("buttonExtractWords"));
     expect(screen.getByTestId("front").value.split("\n").sort()).toEqual([
@@ -129,7 +134,7 @@ describe("extract text", () => {
   it.skip("extracts unknown words", async () => {
     await userEvent.type(
       screen.getByTestId("front"),
-      'Fronta? "frontb," frontc.'
+      'Fronta? "frontb," frontc.',
     );
     userEvent.click(screen.getByTestId("buttonExtractWords"));
     expect(screen.getByTestId("front").value.split("\n").sort()).toEqual([
@@ -146,19 +151,19 @@ describe("submit front/back words", () => {
 
     await userEvent.type(
       screen.getByTestId("front"),
-      ["fronta", "frontb", "frontc"].join("\n")
+      ["fronta", "frontb", "frontc"].join("\n"),
     );
     await userEvent.type(
       screen.getByTestId("back"),
-      ["backa", "backb"].join("\n")
+      ["backa", "backb"].join("\n"),
     );
     userEvent.click(screen.getByTestId("addButton"));
 
     expect(screen.getByTestId("front").textContent).toEqual(
-      ["fronta", "frontb", "frontc"].join("\n")
+      ["fronta", "frontb", "frontc"].join("\n"),
     );
     expect(screen.getByTestId("back").textContent).toEqual(
-      ["backa", "backb"].join("\n")
+      ["backa", "backb"].join("\n"),
     );
     expect(setlistPairs).not.toHaveBeenCalled();
   });
@@ -170,11 +175,11 @@ describe("submit front/back words", () => {
 
     await userEvent.type(
       screen.getByTestId("front"),
-      ["fronta", "frontb", "frontc"].join("\n")
+      ["fronta", "frontb", "frontc"].join("\n"),
     );
     await userEvent.type(
       screen.getByTestId("back"),
-      ["backa", "backb", "backc"].join("\n")
+      ["backa", "backb", "backc"].join("\n"),
     );
     userEvent.click(screen.getByTestId("addButton"));
 
@@ -190,11 +195,11 @@ describe("submit front/back words", () => {
 
     await userEvent.type(
       screen.getByTestId("front"),
-      ["fronta", "frontb", "frontc"].join("\n")
+      ["fronta", "frontb", "frontc"].join("\n"),
     );
     await userEvent.type(
       screen.getByTestId("back"),
-      ["backa", "backb", "backc"].join("\n")
+      ["backa", "backb", "backc"].join("\n"),
     );
     userEvent.click(screen.getByTestId("addButton"));
 

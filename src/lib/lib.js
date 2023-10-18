@@ -14,4 +14,3 @@ export const secondsDays = (days) => (days * secondsPerDay) | 0;
 export const secondsPerDay = 24 * 3600;
 export const nowSeconds = (Date.now() / 1000) | 0;
 export const nowDays = daysSeconds(nowSeconds);
-

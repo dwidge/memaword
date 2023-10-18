@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Storage } from "@dwidge/lib-react";
 
+export const useJson = ([s, setS]) => {
+  return [s ? JSON.parse(s) : undefined, (s) => setS(JSON.stringify(s))];
+};
+
 export const useLog = ([get, set], name = "state") => {
   useEffect(() => {
-    console.log("read", name);
-    console.log(get);
+    console.log("read:" + name, get.length + "B", get);
   }, [get]);
   const setlog = (v) => {
-    console.log("write", name, JSON.stringify(v).length + "B");
+    console.log("write:" + name, v.length + "B", v);
     set(v);
   };
   return [get, setlog];
@@ -24,8 +27,13 @@ export const useCache = ([getReal, setReal]) => {
     setchanged(false);
     setReal(get);
   };
-  return { get, set, save, changed };
+  return { state: [get, set], save, changed };
 };
 
-export const useStorage = (name, init) =>
-  useLog(Storage(useState, useEffect).useStorage(name, init), name);
+export const useStorage = (name, init = "") => {
+  const [s, setS] = useState(() => localStorage.getItem(name) ?? init);
+  useEffect(() => {
+    localStorage.setItem(name, s);
+  }, [s]);
+  return [s, setS];
+};

@@ -112,7 +112,7 @@ LearnPair.propTypes = {
 };
 
 const LearnPage = ({ listPairs, now }) => {
-console.log('LearnPage1',{ listPairs, now })
+  console.log("LearnPage1", { listPairs, now });
 
   const [showmulti, setshowmulti] = useState(false);
   const [getlistPairs, setlistPairs] = listPairs;

@@ -15,6 +15,7 @@ import { getStep } from "../lib/time";
 const MatchPage = ({
   listPairs: [getlistPairs, setlistPairs],
   progress: [progress, setProgress] = [],
+  now = 0,
 }) => {
   if (!progress) return <pre>Loading...</pre>;
 
@@ -22,6 +23,7 @@ const MatchPage = ({
     <Match
       listPairs={[getlistPairs, setlistPairs]}
       progress={[progress, setProgress]}
+      now={now}
     />
   );
 };
@@ -29,22 +31,16 @@ const MatchPage = ({
 const Match = ({
   listPairs: [getlistPairs, setlistPairs],
   progress: [progress, setProgress] = [],
+  now = 0,
 }) => {
-  const nowEpochSeconds = (Date.now() / 1000) | 0;
-  const nowEpochDays = (nowEpochSeconds / (3600 * 24)) | 0;
-  const now = nowEpochSeconds;
-  const today = nowEpochDays;
-
-  console.log({ progress, setProgress });
-
   // const groups = groupSort(getlistPairs, now);
   const combinedPairs = getlistPairs.map((p, i) => ({
     ...p,
     i,
     progress: progress.list[i],
   }));
-  const groups = groupSort(combinedPairs, today - progress.day);
-  console.log("MatchPage");
+  const groups = groupSort(combinedPairs, now);
+
   const learnList = groups.review.concat(groups.new);
 
   const [init, setinit] = useState(0);
@@ -57,7 +53,7 @@ const Match = ({
   const [nextT, setNextT] = useState();
 
   const resetList = () => {
-    if (!learnList.length) return { front: [], back: [] };
+    if (!learnList.length) return { front: [], back: [], question: [] };
 
     const front = learnList[0];
     const back = learnList
@@ -80,15 +76,15 @@ const Match = ({
     const l = resetList();
     setlist(l);
     if (!l) return;
-    setNextT(nextGap(calcInterval(l.question[0].views)));
+    if (l.question[0]) setNextT(nextGap(calcInterval(l.question[0].views)));
     if (l.front.length === 1) setfrontInd(l.front[0].id);
     else if (l.back.length === 1) setbackInd(l.back[0].id);
   }, [n, init]);
 
   const checkAnswer = (frontInd, backInd) => {
+    console.log("checkAnswer1", frontInd, backInd);
     if (frontInd && backInd) {
       if (frontInd === backInd) {
-        console.log("right");
         onReschedule([frontInd], nextT);
 
         setfrontInd();
@@ -96,7 +92,6 @@ const Match = ({
 
         setinit(init + 1);
       } else {
-        console.log("wrong", { frontInd, backInd });
         setNextT(0);
         onReschedule([frontInd, backInd], 0);
       }
@@ -105,7 +100,7 @@ const Match = ({
 
   const onReschedule = (ids, t) => {
     onUpdates(
-      ids.map((id) => reschedule(getItemById(getlistPairs, id), t, now))
+      ids.map((id) => reschedule(getItemById(getlistPairs, id), t, now)),
     );
   };
 
@@ -122,31 +117,22 @@ const Match = ({
     return { index, reset };
   };
 
+  const getMemoExpiry = (now, stepIndex) => now + getStep(stepIndex);
+
   const updateProgress = (progress, { index, reset }) => {
-    const secondsPerDay = 24 * 3600;
-    const startED = progress.day ? progress.day : nowEpochDays;
-    const startES = startED * secondsPerDay;
-
     const oldProgress = progress.list[index];
-    const [level] = oldProgress;
+    const [stepIndex] = oldProgress;
 
-    const stepSec = getStep(level);
-    const stepDays = (stepSec / (3600 * 24)) | 0;
-    const nextDeltaDay = nextES - start + stepDays;
-    const nextES = nowEpochSeconds + stepSec;
-
-    const newProgress = [reset ? 0 : level + 1, day, time];
-
-    console.log({ index, reset, oldProgress, newProgress });
+    const expirySecond = getMemoExpiry(now, stepIndex);
+    const newProgress = [reset ? 0 : stepIndex + 1, expirySecond];
 
     return {
-      day: start,
+      ...progress,
       list: setArrayIndexValue(progress.list, index, newProgress),
     };
   };
 
   const onUpdates = (pairs) => {
-    //console.log("onUpdates", { progress, setProgress });
     if (!progress) return;
     console.log("onUpdates", progress.list.length, getlistPairs.length);
 
@@ -159,8 +145,8 @@ const Match = ({
     setlistPairs(
       pairs.reduce(
         (getlistPairs, pair) => replaceItemById(getlistPairs, pair),
-        getlistPairs
-      )
+        getlistPairs,
+      ),
     );
   };
 

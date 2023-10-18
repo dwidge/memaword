@@ -1,5 +1,5 @@
 import { last } from "@dwidge/lib";
-import {getDaysFromSeconds} from './time.js'
+import { getDaysFromSeconds } from "./time.js";
 
 export const calcNext = (views) =>
   views && views.length ? last(views).next : 0;
@@ -30,30 +30,20 @@ export const ascLevelDescDay = (a, b) =>
   a.progress[0] - b.progress[0] || b.progress[1] - a.progress[1];
 
 export const isPending =
-  (today) =>
-  (x) =>{
-console.log('x111111',x)
-const { views: [{date,next}={}]=[] }=x
-const level=date?1:0,day=getDaysFromSeconds(next)
- return   level > 0 && day <= today;
-}
-export const isPending2 =
-  (today) =>
-  (x) =>{
-console.log('x1',x)
-const { progress: [level, day] }=x
- return   level > 0 && day <= today;
-}
+  (now) =>
+  ({ progress: [step, expiry] = [] }) => {
+    return step > 0 && expiry <= now;
+  };
 
 export const isDone =
-  (today) =>
-  ({ progress: [level, day]=[] }) =>
-    level > 0 && day > today;
+  (now) =>
+  ({ progress: [step, expiry] = [] }) =>
+    step > 0 && now < expiry;
 
 export const isNew =
-  (today) =>
-  ({ progress: [level]=[] }) =>
-    level === 0;
+  (now) =>
+  ({ progress: [step, expiry] = [] }) =>
+    step === 0;
 
 export const groupSort = (list, today) => ({
   review: list.filter(isPending(today)).sort(ascLevelDescDay),
@@ -72,7 +62,7 @@ const keepHistory = false;
 export const reschedule = (
   pair,
   t = nextGap(calcInterval(pair.views)),
-  now
+  now,
 ) => {
   const viewnow = { date: now, next: now + t };
   //console.log({ viewnow }, t);

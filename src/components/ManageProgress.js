@@ -39,7 +39,7 @@ export default function ManageProgress({
     console.log(n, getlistPairs.length, oldChunk.length);
     const newChunk = oldChunk.map(
       ({ views: [{ date = 0, next = 0 } = {}] = [] }) =>
-        next ? convert(date | 0, next | 0) : [0, 0]
+        next ? convert(date | 0, next | 0) : [0, 0],
     );
 
     setProgress({
