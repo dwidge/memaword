@@ -2,7 +2,7 @@ import TinyXLSX from "tiny-xlsx";
 
 const isArray = (a) => a instanceof Array;
 
-const exportXLS = (ts = tables) => {
+const exportXLS = (ts) => {
   const sheets = ts.map(([key, [get, set]]) => ({
     title: key,
     data: isArray(get)
@@ -13,7 +13,7 @@ const exportXLS = (ts = tables) => {
   TinyXLSX.generate(sheets)
     .base64()
     .then((base64) => {
-      location.href =
+      window.location.href =
         "data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64," +
         base64;
     });

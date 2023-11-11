@@ -5,6 +5,8 @@ import Card from "react-bootstrap/Card";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 
+const { confirm } = window;
+
 const Data = ({ tables: ts, formats = {} }) => {
   const tables = Object.entries(ts);
 
@@ -121,7 +123,7 @@ const Data = ({ tables: ts, formats = {} }) => {
                       )}
                     </td>
                   </tr>
-                ),
+                )
               )}
             </tbody>
           </Table>
