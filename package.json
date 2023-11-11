@@ -5,16 +5,16 @@
   "private": true,
   "homepage": "/memaword",
   "dependencies": {
-    "@dwidge/lib": "link:../lib",
+    "@dwidge/lib": "github:dwidge/lib",
     "@dwidge/lib-react": "github:dwidge/lib-react",
-    "@dwidge/table-react": "link:../table-react",
+    "@dwidge/table-react": "github:dwidge/table-react",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.5.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
-    "tiny-xlsx": "link:../tiny-xlsx",
+    "tiny-xlsx": "github:dwidge/tiny-xlsx#browser",
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
@@ -29,15 +29,17 @@
     "eslint-plugin-n": "^15.0.0",
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.30.0",
+    "gh-pages": "^6.0.0",
     "jest-environment-jsdom": "^27.5.1"
   },
   "scripts": {
     "start": "cross-env DISABLE_ESLINT_PLUGIN=true react-scripts start",
-    "build": "cross-env BUILD_PATH='./docs' GENERATE_SOURCEMAP=false react-scripts build",
+    "build": "cross-env BUILD_PATH='./build' GENERATE_SOURCEMAP=false react-scripts build",
     "test2": "xv src",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "lint": "eslint . --ext .js,.json,.*rc",
+    "ghpages:deploy": "npm run build && gh-pages -d build",
     "commit": "npm run lint -- --fix && npm run test -- --watchAll=false && npm run build && git add . && git commit -m",
     "push": "npm version patch && git push --follow-tags"
   },
