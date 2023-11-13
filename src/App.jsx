@@ -28,7 +28,7 @@ const App = () => {
   const listPairsOnly = useJson(useLog(useStorage("pairs", "[]"), "pairs"));
   const listSents = useJson(useLog(useStorage("sents", "[]"), "sents"));
   const progress = useCache(
-    useProgressStr(useLog(useStorage("progress", ""), "progress")),
+    useProgressStr(useLog(useStorage("progress", ""), "progress"))
   );
   const p = progress.state;
 
