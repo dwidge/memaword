@@ -42,7 +42,7 @@ const App = () => {
   }, []);
 
   return (
-    <Router basename="/memaword">
+    <Router basename={import.meta.env.VITE_BASE_URL}>
       <nav style={{ overflowX: "auto" }}>
         <NavLink
           className={({ isActive }) => (isActive ? "link-active" : "link")}
