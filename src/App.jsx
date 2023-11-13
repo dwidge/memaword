@@ -43,7 +43,9 @@ const App = () => {
 
   return (
     <Router basename={import.meta.env.VITE_BASE_URL}>
-      <nav style={{ overflowX: "auto" }}>
+      <nav
+        style={{ display: "flex", flexWrap: "wrap", justifyContent: "stretch" }}
+      >
         <NavLink
           className={({ isActive }) => (isActive ? "link-active" : "link")}
           to="/add"
