@@ -16,11 +16,12 @@ export default defineConfig(({ command, mode }) => {
         },
         includeAssets: ["**/*"],
         manifest: {
+          id: env.VITE_TITLE,
           name: env.VITE_TITLE,
           short_name: env.VITE_TITLE,
           description: env.VITE_DESCRIPTION,
-          start_url: env.VITE_BASE_URL,
-          scope: env.VITE_BASE_URL,
+          start_url: env.VITE_BASE_URL + "/",
+          scope: env.VITE_BASE_URL + "/",
           theme_color: env.VITE_THEME_COLOR,
           background_color: "#222222",
           icons: [
