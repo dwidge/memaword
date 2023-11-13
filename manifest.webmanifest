@@ -1,1 +1,1 @@
-{"display":"standalone","background_color":"#222222","lang":"en","icons":[{"src":"apple-touch-icon.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}]}
+{"name":"Memaword","short_name":"Memaword","start_url":"/memaword","display":"standalone","background_color":"#222222","lang":"en","scope":"/memaword","description":"Memorize words and phrases","theme_color":"#ff00ff","icons":[{"src":"apple-touch-icon.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}]}
