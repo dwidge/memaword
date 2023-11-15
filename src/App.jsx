@@ -8,7 +8,7 @@ import {
 import { useJson, useLog, useStorage, useCache } from "./lib/useCache";
 import { useProgressStr } from "./lib/useProgressToStr";
 
-import AddPage from "./components/AddPage";
+import AddPage from "./components/AddPairsPage";
 import AddParagraph from "./components/AddParagraph";
 import LearnPage from "./components/LearnPage";
 import MatchPage from "./components/MatchPage";
