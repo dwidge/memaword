@@ -8,10 +8,8 @@
     "build": "tsc && vite build && cpy dist/index.html . --rename 404.html",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "test": "xv src",
-    "ghpages": "npm run build && gh-pages -d dist",
-    "dev": "cross-env NODE_ENV=development dotenv-flow -p . npm run",
-    "prod": "cross-env NODE_ENV=production dotenv-flow -p . npm run"
+    "test": "vitest",
+    "ghpages": "npm run build && gh-pages -d dist"
   },
   "dependencies": {
     "@dwidge/lib": "github:dwidge/lib",
@@ -27,21 +25,23 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@testing-library/preact": "^3.2.3",
+    "@testing-library/user-event": "^14.5.1",
     "@types/node": "^20.8.3",
-    "@types/react": "^18.2.15",
-    "@types/react-dom": "^18.2.7",
+    "@types/react": "^17",
+    "@types/react-dom": "^17",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "@vitejs/plugin-react": "^4.0.3",
     "cpy-cli": "^5.0.0",
-    "cross-env": "^7.0.3",
-    "dotenv-flow-cli": "^1.0.0",
     "eslint": "^8.45.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
     "gh-pages": "^6.0.0",
+    "happy-dom": "^12.10.3",
     "typescript": "^5.0.2",
     "vite": "^4.4.5",
-    "vite-plugin-pwa": "^0.16.7"
+    "vite-plugin-pwa": "^0.16.7",
+    "vitest": "^0.34.6"
   }
 }
