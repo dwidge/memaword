@@ -10,7 +10,7 @@ import {
 } from "@dwidge/lib";
 import { onChange } from "@dwidge/lib-react";
 
-const AddPairs = ({ listPairs, now }) => {
+const AddPairsPage = ({ listPairs, now }) => {
   const [pairs, setpairs] = listPairs;
   const [frontWords, setfrontWords] = useState("");
   const [backWords, setbackWords] = useState("");
@@ -42,7 +42,7 @@ const AddPairs = ({ listPairs, now }) => {
     const isSamePair = (a, b) => a.front === b.front && a.back === b.back;
 
     const newpairs = transpose([frontWordsA, backWordsA]).map(
-      ([front, back]) => ({ id: uuid(), front, back, views: [], group }),
+      ([front, back]) => ({ id: uuid(), front, back, views: [], group })
     );
 
     const unseenpairs = dropIfIncluded(newpairs, pairs, isSamePair);
@@ -54,8 +54,10 @@ const AddPairs = ({ listPairs, now }) => {
 
   return (
     <div>
-      <h3>Group</h3>
-      <input value={group} onChange={onChange(setGroup)}></input>
+      <div>
+        <label for="group">Group</label>
+        <input id="group" value={group} onChange={onChange(setGroup)}></input>
+      </div>
       <h3>Front</h3>
       <p>Words or phrases, one per line.</p>
       <p>
@@ -95,9 +97,9 @@ const AddPairs = ({ listPairs, now }) => {
   );
 };
 
-AddPairs.propTypes = {
+AddPairsPage.propTypes = {
   listPairs: PropTypes.array.isRequired,
   now: PropTypes.number.isRequired,
 };
 
-export default AddPairs;
+export default AddPairsPage;
