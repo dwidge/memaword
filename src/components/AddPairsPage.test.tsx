@@ -1,6 +1,9 @@
-import { test, expect } from "vitest";
+import { test, expect, vi } from "vitest";
 import { render, fireEvent } from "@testing-library/preact";
 import AddPairsPage from "./AddPairsPage.jsx";
+import { setupTests } from "../lib/setupTests.js";
+
+setupTests();
 
 test("updates the group input field correctly", () => {
   const listPairs = [[], () => {}];
@@ -12,7 +15,7 @@ test("updates the group input field correctly", () => {
   expect(groupInput.value).toBe("Test");
 });
 
-test.skip("updates the front words textarea and extracts words and han characters correctly", () => {
+test("updates the front words textarea and extracts words and han characters correctly", () => {
   const listPairs = [[], () => {}];
   const { getByTestId, getByText } = render(
     <AddPairsPage listPairs={listPairs} now={0} />
@@ -26,7 +29,7 @@ test.skip("updates the front words textarea and extracts words and han character
   // Assert the han character extraction logic
 });
 
-test.skip("updates the back words textarea correctly", () => {
+test("updates the back words textarea correctly", () => {
   const listPairs = [[], () => {}];
   const { getByTestId } = render(
     <AddPairsPage listPairs={listPairs} now={0} />
@@ -38,7 +41,7 @@ test.skip("updates the back words textarea correctly", () => {
   expect(backTextarea.value).toBe("Translation 1\nTranslation 2");
 });
 
-test.skip("copies front words to clipboard correctly", () => {
+test("copies front words to clipboard correctly", () => {
   const listPairs = [[], () => {}];
   const { getByTestId } = render(
     <AddPairsPage listPairs={listPairs} now={0} />
@@ -50,8 +53,8 @@ test.skip("copies front words to clipboard correctly", () => {
   // Add an assertion to check if the text was copied to clipboard
 });
 
-test.skip("adds pairs to listPairs state correctly", () => {
-  const listPairs = [[], () => {}];
+test("adds pairs to listPairs state correctly", () => {
+  const listPairs = [[], vi.fn()] as const;
   const { getByTestId } = render(
     <AddPairsPage listPairs={listPairs} now={0} />
   );
@@ -61,5 +64,6 @@ test.skip("adds pairs to listPairs state correctly", () => {
   fireEvent.change(frontTextarea, { target: { value: "Test" } });
   fireEvent.change(backTextarea, { target: { value: "Translation" } });
   fireEvent.click(addButton);
-  expect(listPairs[0].length).toBe(1);
+  const newListPairs = listPairs[1].mock.calls[0];
+  expect(newListPairs.length).toBe(1);
 });
